@@ -213,6 +213,9 @@ composeSubmit.addEventListener("click", (event)=>{
   event.preventDefault();
   
   let textArea = composeBody.value.split("\n");
+  textArea = textArea.filter((paragraph) =>{
+    return paragraph != "";
+  })
   let date = composeDate.value.split("-");
   let parsedDate = months[parseInt(date[1])-1] + " ";
   let dayInt = parseInt(date[2])
