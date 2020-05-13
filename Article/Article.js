@@ -85,6 +85,20 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: 'So Long and thanks for all the fish',
+    date: 'Nov 9th 1984',
+    firstParagraph: 'It is important to note that suddenly, and against all probability, a sperm whale had been called into existence, several miles above the surface of an alien planet. But since this is not a naturally tenable position for a whale, this innocent creature had very little time to come to terms with its identity. This is what it thought as it fell:',
+    secondParagraph: '‘Ahhh! Whoa! What’s happening? Who am I? Why am I here? What’s my purpose in life? What do I mean by ‘who am I’? Okay, okay, calm down, calm down, get a grip now. Ooh, this is an interesting sensation. What is it? It’s a sort of a tingling in my… well, I suppose I better start finding names for things. Let’s call it a… tail! Yeah! Tail! And hey, what’s this roaring sound, whooshing past what I’m suddenly gonna call my head? Wind! Is that a good name? It’ll do. Yeah, this is really exciting! I’m dizzy with anticipation! Or is it the wind? There’s an awful lot of that now, isn’t it? And what’s this thing coming toward me very fast? So big and flat and round, it needs a big wide sounding name like ‘Ow’, ‘Ownge’, ‘Round’, ‘Ground’! That’s it! Ground! Ha! I wonder if it’ll be friends with me? Hello Ground!’ …',
+    thirdParagraph: 'Curiously, the only thing that went through the mind of the bowl of petunias as it fell, was: ‘Oh no, not again.’ Many have speculated that if we knew exactly why the bowl of petunias had thought that, we should know a lot more about the nature of the universe than we do now.'
+  },
+  {
+    title: 'It Will Not Be This Day',
+    date: 'Dec 17th 2003',
+    firstParagraph: 'Hold your ground! Hold your ground! Sons of Gondor, of Rohan, my brothers,',
+    secondParagraph: 'I see in your eyes the same fear that would take the heart of me. A day may come when the courage of men fails, when we forsake our friends and break all bonds of fellowship, but it is not this day. An hour of wolves and shattered shields, when the age of men comes crashing down, but it is not this day!',
+    thirdParagraph: 'This day we fight!! By all that you hold dear on this good Earth, I bid you stand, Men of the West!!!',
   }
 ];
 
@@ -111,3 +125,39 @@ const data = [
 
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 */
+
+const articleMaker = function(title, date, paragraphs){
+  let article = document.createElement("div");
+  let articleTitle = document.createElement("h2");
+  let articleDate = document.createElement("p");
+  
+  let articleButton = document.createElement("span");
+
+  article.append(articleTitle, articleDate);
+  paragraphs.forEach(paragraph => {
+    let pElement = document.createElement("p")
+    article.append(pElement);
+    pElement.textContent = paragraph;
+  })
+  article.append(articleButton);
+
+  articleTitle.textContent = title;
+  articleDate.textContent = date;
+  articleButton.textContent = ". . .";
+
+  article.classList.add("article");
+  articleDate.classList.add("date");
+  articleButton.classList.add("expandButton");
+
+  articleButton.addEventListener("click", (event) =>{
+    article.classList.toggle("article-open");
+  })
+
+  return article;
+
+}
+let articleList = document.querySelector(".articles");
+data.forEach(data =>{
+  articleList.append(articleMaker(data.title, data.date, [data.firstParagraph, data.secondParagraph, data.thirdParagraph]));
+
+});
