@@ -125,6 +125,7 @@ const data = [
 
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 */
+let articleList = document.querySelector(".articles");
 
 const articleMaker = function(title, date, paragraphs){
   let article = document.createElement("div");
@@ -132,6 +133,15 @@ const articleMaker = function(title, date, paragraphs){
   let articleDate = document.createElement("p");
   
   let articleButton = document.createElement("span");
+
+  let articleCloseButton = document.createElement("span");
+  articleCloseButton.textContent = "✓";
+  articleCloseButton.classList.add("checkBox");
+  article.append(articleCloseButton);
+  articleCloseButton.addEventListener("click", (event) =>{
+    articleList.removeChild(article);
+  });
+
 
   article.append(articleTitle, articleDate);
   paragraphs.forEach(paragraph => {
@@ -143,7 +153,7 @@ const articleMaker = function(title, date, paragraphs){
 
   articleTitle.textContent = title;
   articleDate.textContent = date;
-  articleButton.textContent = ". . .";
+  articleButton.textContent = "Click to Expand";
 
   article.classList.add("article");
   articleDate.classList.add("date");
@@ -151,13 +161,72 @@ const articleMaker = function(title, date, paragraphs){
 
   articleButton.addEventListener("click", (event) =>{
     article.classList.toggle("article-open");
+    switch(articleButton.textContent){
+      case "Click to Expand":
+        articleButton.textContent = "Click to Collapse";
+        break;
+      case "Click to Collapse":
+        articleButton.textContent = "Click to Expand";
+        break;
+    };
   })
 
   return article;
 
 }
-let articleList = document.querySelector(".articles");
 data.forEach(data =>{
   articleList.append(articleMaker(data.title, data.date, [data.firstParagraph, data.secondParagraph, data.thirdParagraph]));
 
 });
+
+
+///compose
+let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+  let compose = document.createElement("div");
+  compose.classList.add("article", "article-open");
+  let composeForm = document.createElement("form");
+  composeForm.id= "articleForm";
+  let composeTitle = document.createElement("input");
+  composeTitle.type="text";
+  composeTitle.name="article-title"
+  composeTitle.value="Title"
+  let composeDate = document.createElement("input");
+  composeDate.type="date"
+  composeDate.name="article-date"
+  let composeBody = document.createElement("textarea")
+  composeBody.form = "articleForm"
+  let composeSubmit = document.createElement("input")
+  composeSubmit.type="submit"
+  composeSubmit.value="Create Article"
+  composeSubmit.id="newArticle"
+
+  compose.append(composeForm);
+  composeForm.append(composeTitle);
+  composeForm.append(composeDate);
+  composeForm.append(composeBody);
+  composeForm.append(composeSubmit);
+
+
+composeSubmit.addEventListener("click", (event)=>{
+  event.preventDefault();
+  
+  let textArea = composeBody.value.split("\n");
+  let date = composeDate.value.split("-");
+  let parsedDate = months[parseInt(date[1])-1] + " ";
+  let dayInt = parseInt(date[2])
+  if(dayInt == 1){
+    parsedDate += "1st, ";
+  } else if(dayInt == 2){
+    parsedDate += "2nd, ";
+  } else if(dayInt == 3){
+    parsedDate += "3rd";
+  } else {
+    parsedDate += dayInt + "th, ";
+  }
+  parsedDate += date[0];
+  articleList.append(articleMaker(composeTitle.value, parsedDate, textArea));
+});
+
+document.querySelector("body").append(compose);
